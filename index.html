@@ -1,43 +1,115 @@
 <!DOCTYPE html>
-<html lang="en-US">
-
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fiverr Ad</title>
+    <title>Reaction Time Test</title>
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+
+        #screen {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 2em;
+            color: white;
+            cursor: pointer;
+        }
+
+        .start {
+            background-color: purple;
+        }
+
+        .red {
+            background-color: red;
+        }
+
+        .blue {
+            background-color: blue;
+        }
+
+        .grey {
+            background-color: grey;
+        }
+    </style>
 </head>
-<style>
-
-</style>
-
 <body>
-   <!-- Put this code anywhere in the body of your page where you want the badge to show up. -->
+    <div id="screen" class="start">
+        CLICK TO START
+    </div>
 
-<div itemscope itemtype='http://schema.org/Person' class='fiverr-seller-widget' style='display: inline-block;'>
-    <a itemprop='url' href=https://www.fiverr.com/king_cobra07 rel="nofollow" target="_blank"
-        style='display: inline-block;'>
-        <div class='fiverr-seller-content' id='fiverr-seller-widget-content-3444efa2-f39c-4cec-a4a2-554cbb2e97ae'
-            itemprop='contentURL' style='display: none;'></div>
-        <div id='fiverr-widget-seller-data' style='display: none;'>
-            <div itemprop='name'>king_cobra07</div>
-            <div itemscope itemtype='http://schema.org/Organization'><span itemprop='name'>Fiverr</span></div>
-            <div itemprop='jobtitle'>Seller</div>
-            <div itemprop='description'>Hi there!
+    <script>
+        const screen = document.getElementById('screen');
+        let startTime;
+        let clickedTooEarly = false;
 
-                I am a professional and expertise Prompt Engineer of Text and Image prompts and here at Fiverr I provide
-                many Services with the Use of AI Content Writing as a certified Artificial Engineer from M.I.T and I
-                also have done many courses in English too.
+        // Add a click event listener
+        screen.addEventListener('click', function() {
+            console.log('Screen clicked'); // Debug log to confirm the click
+            if (screen.classList.contains('start')) {
+                console.log('Test started');
+                startTest();
+            } else if (screen.classList.contains('red')) {
+                if (!clickedTooEarly) {
+                    console.log('Clicked too early');
+                    tooEarly();
+                }
+            } else if (screen.classList.contains('blue')) {
+                console.log('Blue screen clicked');
+                handleReaction();
+            }
+        });
 
-                I speak Hindi and Marathi as my Native languages as being from India and English is at Fluent Level. I
-                hope you place your order soon :-D</div>
-        </div>
-    </a>
-</div>
+        // Start the test
+        function startTest() {
+            screen.classList.remove('start');
+            screen.classList.add('red');
+            screen.textContent = "WAIT FOR THE SCREEN TO TURN BLUE";
+            console.log('Screen turned red'); // Confirm state change to red
 
-<script id='fiverr-seller-widget-script-3444efa2-f39c-4cec-a4a2-554cbb2e97ae'
-    src='https://widgets.fiverr.com/api/v1/seller/king_cobra07?widget_id=3444efa2-f39c-4cec-a4a2-554cbb2e97ae'
-    data-config='{"category_name":"\n                                    Writing \u0026 Translation\n\n                            "}'
-    async='true' defer='true'></script>
+            const randomDelay = Math.random() * 3000 + 2000;
+            console.log(`Waiting for ${randomDelay} ms before turning blue`);
+            setTimeout(turnBlue, randomDelay);
+        }
+
+        // Turn the screen blue
+        function turnBlue() {
+            if (!clickedTooEarly) {
+                startTime = new Date().getTime();
+                screen.classList.remove('red');
+                screen.classList.add('blue');
+                screen.textContent = "CLICK!";
+                console.log('Screen turned blue, start time recorded'); // Confirm state change to blue
+            }
+        }
+
+        // Handle clicking too early
+        function tooEarly() {
+            screen.classList.remove('red');
+            screen.classList.add('grey');
+            screen.textContent = "TOO EARLY, REFRESH TO TRY AGAIN";
+            clickedTooEarly = true;
+            console.log('Too early, game over'); // Confirm too early state
+        }
+
+        // Handle reaction time calculation
+        function handleReaction() {
+            const endTime = new Date().getTime();
+            const reactionTime = endTime - startTime;
+            screen.textContent = reactionTime + " ms";
+            screen.style.cursor = "default"; // Disable further clicks
+            console.log(`Reaction time: ${reactionTime} ms`); // Log the reaction time
+        }
+    </script>
 </body>
-
 </html>
